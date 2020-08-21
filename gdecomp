@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Script to automatically decompile and output source code of a binary with ghidra
+
+if [ "$#" -ne 2 ]  &&  [ "$#" != 1 ];
+then
+  echo ""
+  echo "Usage:"
+  echo "$0 <binary path> <output source path>"
+  echo "$0 <binary path>"
+  echo ""
+  exit 1
+fi
+
+GHIDRA_PATH=/opt/ghidra
+
+if [ ! -d $GHIDRA_PATH ] || [ -L $GHIDRA_PATH ];
+  then
+    echo "$GHIDRA_PATH not found. Ghidra not found."
+    exit 1
+fi
+
+DECOMPILE_SCRIPT_PATH=/opt/shingeki/Decompile.java
+
+if [ ! -f "$DECOMPILE_SCRIPT_PATH" ]; 
+  then
+    echo "$DECOMPILE_SCRIPT_PATH does not exist! Check your path."
+    exit 1
+fi
+
+
+WORK_FOLDER=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
+
+# Create workfolder
+
+mkdir /tmp/$WORK_FOLDER
+
+# Receive 2 arguments
+
+echo "Decompiling..."
+
+if [ "$#" ==  2 ]; 
+  then
+    $GHIDRA_PATH/support/analyzeHeadless . .t -import $1  -postscript $DECOMPILE_SCRIPT_PATH $2 2>/dev/null >/dev/null
+fi
+
+if [ "$#" ==  1 ]; 
+  then
+    $GHIDRA_PATH/support/analyzeHeadless . .t -import $1  -postscript $DECOMPILE_SCRIPT_PATH $1.c 2>/dev/null >/dev/null
+fi
+
+# Remove gpr and rep files first (CAREFUL!)
+# Cleaning files
+
+echo "Cleaning files..."
+rm -rf *.gpr *.rep
+rm -rf .t*
+
