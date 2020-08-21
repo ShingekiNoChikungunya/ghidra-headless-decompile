@@ -1,15 +1,23 @@
-# ghidra-headless-decompile
+# GHidra Headless Decompile Revamped
 
-this script will delete any .gpr and .rep (ghidra project files) in the directory before it does the decompiling, so that things can be imported properly.
-
-It will not delete them after decompiling, so you can open them.
-
-ghidra can be downloaded from https://ghidra-sre.org/
+Ghidra can be downloaded from https://ghidra-sre.org/
 
 ### You will need to modify GHIDRA_PATH variable in the script before running it.
 
+
+### Installation (Experimental)
+
+```
+git clone https://github.com/ShingekiNoChikungunya/ghidra-headless-decompile && cd ghidra-headless-decompile && ./install.sh
+```
+
 ### Example Usage:
 ```
-chmod +x gd_decomp.sh
-./gd_decomp.sh ~/Downloads/binary_file /tmp/source.c
+  gdecomp my_binary_file my_output.c
 ```
+
+```
+  gdecomp my_binary_file
+```
+
+That's a fast way to decompile using ghidra without any tweaks.
